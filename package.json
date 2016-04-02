@@ -1,0 +1,24 @@
+{
+  "name": "swarmlog-manager",
+  "author": "elsehow",
+  "license": "BSD-3-Clause",
+  "main": "src/index.js",
+  "watch": {
+    "test": "*.js"
+  },
+  "scripts": {
+    "test": "node test/*.js | tap-spec",
+    "watch": "npm-watch"
+  },
+  "devDependencies": {
+    "npm-watch": "^0.1.3",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.5.1"
+  },
+  "dependencies": {
+    "chloride": "^2.1.1",
+    "level-browserify": "^1.1.0",
+    "md5": "^2.1.0",
+    "swarmlog": "^1.4.0"
+  }
+}
