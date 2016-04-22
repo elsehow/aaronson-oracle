@@ -1,17 +1,14 @@
-# contributing - swarmlog-manager
+# contributing 
 
-thanks for contributing to swarmlog-manager! see "todos" below for current priorities
+## developing
 
-## setting up a wrtc environment
+clone this repository, then
 
-### method 1 (easy)
+    npm install
+    npm run watch
 
-run in a wrtc enabled environment by building a browser bundle with `browserify` and requiring it in some index.html
-
-### method 2 (wacky)
-
-just turn off your wifi!
+now you can edit js files in src/ and test/ - tests will automatically re-run
 
 ## todo
 
-we may want to (optionally) protect keys with a password. a password passed into the manger could be used to unlock keys that are encrypted at rest in the leveldb
+development priorities here
