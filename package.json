@@ -2,15 +2,12 @@
   "author": "elsehow",
   "license": "BSD-3-Clause",
   "main": "src/index.js",
-  "watch": {
-    "test": "*.js"
-  },
   "scripts": {
     "test": "tape test/*.js",
-    "watch": "npm-watch"
+    "watch": "runwatch **/*.js -c \"npm test\""
   },
   "devDependencies": {
-    "npm-watch": "^0.1.3",
+    "runwatch": "0.0.3",
     "tape": "^4.5.1"
   },
   "dependencies": {}
