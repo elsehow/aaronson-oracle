@@ -3,7 +3,7 @@ var kefir = require('kefir')
 var mean = require('../src/running-mean')
 
 function round (num) {
-  return Math.round(num * 1000) / 1000
+  return Math.floor(num * 100)
 }
 
 function whichKey (e) {
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   var countS = accuracyS.scan(acc => acc+=1, 0)
 
   accuracyS.zip(countS).filter(z => z[1]>15).onValue(z =>  {
-    avgEl.innerHTML = round(z[0])
+    avgEl.innerHTML = round(z[0]) + '%'
     return
   })
 
