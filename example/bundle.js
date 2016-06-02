@@ -4381,10 +4381,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
   
   var pressS = kefir.stream(emitter => {
     document.body.addEventListener("keypress", emitter.emit)
-  }).map(ev => ev.key).filter(k => {
-    return k==='f'||k==='d'
+  }).map(e => {
+    if(window.event) { // IE                    
+      return e.keyCode;
+    } else if(e.which){ // Netscape/Firefox/Opera                   
+      return e.which;
+    }
+  }).map(String.fromCharCode)
+  .filter(l => {
+   return (l==='f'||l==='d')
   })
-  
+
   predict(pressS).onValue(avg => {
     avgEl.innerHTML = avg
   })
