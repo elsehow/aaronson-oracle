@@ -17,7 +17,6 @@
     "keypress": "^0.2.1",
     "lodash": "^4.13.1",
     "permutation": "0.0.1",
-    "running-average": "^2.0.2",
     "running-mean": "^0.1.0"
   }
 }
