@@ -24,6 +24,8 @@ This repo implements the no-enhancements version.
 
 \- Noura Howell
 
+Scott himself referenced this oracle at the end of his [reply to Roger Penrose](http://www.scottaaronson.com/blog/?p=2756)
+
 ## license
 
 BSD

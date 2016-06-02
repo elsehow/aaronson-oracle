@@ -5,6 +5,8 @@ var kefir = require('kefir')
 //var mockInputS = kefir.sequentially(3, corpus)
 //predict(mockInputS).log('prediction average')
 
+// test on a random corpus! should get 50%
+
 var well1024a = require('prng-well1024a')
 var rng = well1024a([Date.now(), process.pid]);
 
