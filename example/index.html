@@ -3,6 +3,23 @@
 #avg {
   font-size: 4em;
 }
+#results_0 {
+  display: none;
+}
+th {
+  text-align: left;
+}
+td {
+  min-width: 50px;
+}
+.correct {
+  background-color: lightgreen;
+  background-color: rgba(144, 238, 144, .4);
+}
+.incorrect {
+  background-color: salmon;
+  background-color: rgba(200, 91, 91, .4);
+}
 </style>
 <body>
   <script src="bundle.js"></script>
@@ -13,5 +30,16 @@
 <p>
 What's going on here? This is an <a href="https://github.com/elsehow/aaronson-oracle">Aaronson Oracle</a>.
 </p>
+
+<table id="results">
+  <tr id="results_header">
+    <th>###</th>
+    <th>IN</th>
+    <th>Guess</th>
+    <th>Change in Average</th>
+    <th>Rolling Average</th>
+  </tr>
+  <tr id="results_0"/>
+</table>
 
 </body>

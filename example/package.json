@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/browserify index.js -o bundle.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "onready": "0.0.3"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.1"
   }
 }

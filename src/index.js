@@ -37,31 +37,36 @@ function isCorrect (prediction, letter) {
   return 0
 }
 
-function predict (inputS) {
+function predict (inputS, callback) {
 
   var r = mean();
 
   var lastSix = inputS
       .slidingWindow(6,6)
 
+  var last, prediction, amCorrect;
+
   return lastSix.map(s => {
    var fiveGram = _.slice(s, 0,5).join('')
    // predict next value
-   var prediction = predictNextLetter(fiveGram)
+   prediction = predictNextLetter(fiveGram)
    //make a fn to update model after i see real value
    var updateModel = updateModelF(fiveGram)
    // get the next letter now
-   var last = _.last(s)
+   last = _.last(s)
    // update my model with it (HACK SIDE-EFFECTY)
    updateModel(last)
    // return whether my prediction was correct
-   return isCorrect(prediction, last)
+   amCorrect = isCorrect(prediction, last)
+   return amCorrect
   })
   .map(p => {
+    var beforeAverage = r.mean;
     r.push(p)
+    // call callback with latest results (SUCH SIDE-EFFECTY)
+    if (callback) { callback(last, prediction, !!amCorrect, beforeAverage, r.mean) }
     return r.mean
   })
-
 }
 
-module.exports = predict
+module.exports = predict;
