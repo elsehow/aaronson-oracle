@@ -1,6 +1,7 @@
 var kefir = require('kefir')
 var possibleFiveGrams = require('../src/possible-5-grams')()
 var mean = require('running-mean');
+var _ = require('lodash')
 /*
 
   set up a model of the form
@@ -30,44 +31,36 @@ function predictNextLetter (fivegram) {
   return 'd'
 }
 
+function isCorrect (prediction, letter) {
+  if (prediction === letter)
+    return 1
+  return 0
+}
 
 function predict (inputS) {
 
-  var fivegramS = inputS
-      .slidingWindow(5,5).map(str => str.join(''))
-
   var r = mean();
 
-  var onNextLetter = null
+  var lastSix = inputS
+      .slidingWindow(6,6)
 
-  fivegramS
-    .map(fivegram => {
-      // set to update model on the next input
-      var prediction = predictNextLetter(fivegram)
-//console.log('predicting', prediction)
-      var update = updateModelF(fivegram)
-      onNextLetter = letter => {
-//console.log('seeing', letter)
-        update(letter)
-        if (letter === prediction) {
-//console.log('i was right!!!')
-          return 1
-        }
-        return 0
-      }
-    })
-    .onValue(() => {})
-
-  return inputS.map(l => {
-    if (onNextLetter) {
-      return onNextLetter(l)
-    }
+  return lastSix.map(s => {
+   var fiveGram = _.slice(s, 0,5).join('')
+   // predict next value
+   var prediction = predictNextLetter(fiveGram)
+   //make a fn to update model after i see real value
+   var updateModel = updateModelF(fiveGram)
+   // get the next letter now
+   var last = _.last(s)
+   // update my model with it (HACK SIDE-EFFECTY)
+   updateModel(last)
+   // return whether my prediction was correct
+   return isCorrect(prediction, last)
   })
-    .filter(x => x==1||x==0)
-    .map(x => {
-      r.push(x)
-      return r.mean
-    })
+  .map(p => {
+    r.push(p)
+    return r.mean
+  })
 
 }
 

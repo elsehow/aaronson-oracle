@@ -14,6 +14,16 @@ I asked Scott if he remembered what he did, and he said,
 
 This repo implements the no-enhancements version.
 
+## testimonials
+
+> OMG I'm a caged bird! A caged bird with clipped wings!!!!!
+
+\- My dad
+
+> this is art
+
+\- Noura Howell
+
 ## license
 
 BSD

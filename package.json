@@ -9,6 +9,7 @@
     "watch": "runwatch \"**/*.js\" -r \"npm test\""
   },
   "devDependencies": {
+    "prng-well1024a": "^2.0.0",
     "runwatch": "^0.1.3",
     "tape": "^4.5.1"
   },

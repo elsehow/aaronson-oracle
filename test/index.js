@@ -1,4 +1,18 @@
 var predict = require('..')
-var corpus = 'fdffdddfffdfdfdffdffdffdffdfdfdffdfffdfdfdfdfdfdfdffdffdfdffdfdffdfdffdfdfdfdfdffdfdfdfdffdfdffdfdfdffdffdffdffdffdfdfdfdfdfdfdffdffdffdffdffdffdffdffdffdffdffdfdfdfdfdffdfdfdfdfdfdfdffdffdfdfdfdfdf'.split('')
-var mockInputS = require('kefir').sequentially(3, corpus)
-predict(mockInputS).log('prediction average')
+var kefir = require('kefir')
+// test on my own corpus
+//var corpus = 'fdffdddfffdfdfdffdffdffdffdfdfdffdfffdfdfdfdfdfdfdffdffdfdffdfdffdfdffdfdfdfdfdffdfdfdfdffdfdffdfdfdffdffdffdffdffdfdfdfdfdfdfdffdffdffdffdffdffdffdffdffdffdffdfdfdfdfdffdfdfdfdfdfdfdffdffdfdfdfdfdf'.split('')
+//var mockInputS = kefir.sequentially(3, corpus)
+//predict(mockInputS).log('prediction average')
+
+var well1024a = require('prng-well1024a')
+var rng = well1024a([Date.now(), process.pid]);
+
+function randomLetter () {
+  var number = rng.getUInt32();
+  return ['d', 'f'][number % 2];
+}
+
+// random key presses
+var randomInputS = kefir.withInterval(3, emitter => emitter.emit(randomLetter()))
+predict(randomInputS).log('prediction average')
