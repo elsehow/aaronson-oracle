@@ -4,7 +4,7 @@
 
 \- Scott Aaronson, *Quantum Computing Since Democritus*.
 
-Can you use your free will? Try your hand.
+Can you use your free will? [Try your hand](http://people.ischool.berkeley.edu/~nick/aaronson-oracle).
 
 ## how does it work?
 
