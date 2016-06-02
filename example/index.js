@@ -1,25 +1,44 @@
 var predict = require('..')
 var kefir = require('kefir')
-document.addEventListener("DOMContentLoaded", function(event) { 
+var mean = require('../src/running-mean')
+
+function round (num) {
+  return Math.round(num * 1000) / 1000
+}
+
+function whichKey (e) {
+  if (window.event) // IE
+    return e.keyCode
+  return e.which
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
   var avgEl = document.getElementById('avg')
-  
+  var lastGuessesEl = document.getElementById('lastGuesses')
   var pressS = kefir.stream(emitter => {
     document.body.addEventListener("keypress", emitter.emit)
-  }).map(e => {
-    if(window.event) { // IE                    
-      return e.keyCode;
-    } else if(e.which){ // Netscape/Firefox/Opera                   
-      return e.which;
-    }
-  }).map(String.fromCharCode)
-  .filter(l => {
-   return (l==='f'||l==='d')
-  })
+  }).map(whichKey)
+    .map(String.fromCharCode)
+    .filter(l => (l==='f'||l==='d'))
 
-  var accuracyS = predict(pressS)
+  var predictionS = predict(pressS)
+  var accuracyS = mean(predictionS)
   var countS = accuracyS.scan(acc => acc+=1, 0)
 
-  accuracyS.zip(countS).filter(z => z[1]>15).onValue(z => 
-      avgEl.innerHTML = z[0]
-  )
+  accuracyS.zip(countS).filter(z => z[1]>15).onValue(z =>  {
+    avgEl.innerHTML = round(z[0])
+    return
+  })
+
+  predictionS.slidingWindow(20).onValue(ps => {
+    var guesses = ps.map(p => {
+      var correct = p[0]===p[1]
+      var color = correct ? "white" : "red"
+      return `<span style="background-color:${color}">predicted: ${p[0]}, observed: ${p[1]}</span><br>`
+    }).reverse().join('')
+    lastGuessesEl.innerHTML = guesses
+  })
+
+
 })

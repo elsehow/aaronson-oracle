@@ -1,4 +1,5 @@
 var predict = require('..')
+var mean = require('../src/running-mean')
 var kefir = require('kefir')
 // test on my own corpus
 //var corpus = 'fdffdddfffdfdfdffdffdffdffdfdfdffdfffdfdfdfdfdfdfdffdffdfdffdfdffdfdffdfdfdfdfdffdfdfdfdffdfdffdfdfdffdffdffdffdffdfdfdfdfdfdfdffdffdffdffdffdffdffdffdffdffdffdfdfdfdfdffdfdfdfdfdfdfdffdffdfdfdfdfdf'.split('')
@@ -17,4 +18,4 @@ function randomLetter () {
 
 // random key presses
 var randomInputS = kefir.withInterval(3, emitter => emitter.emit(randomLetter()))
-predict(randomInputS).log('prediction average')
+mean(predict(randomInputS)).log('prediction average')

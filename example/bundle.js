@@ -4376,31 +4376,50 @@ function config (name) {
 },{}],26:[function(require,module,exports){
 var predict = require('..')
 var kefir = require('kefir')
-document.addEventListener("DOMContentLoaded", function(event) { 
+var mean = require('../src/running-mean')
+
+function round (num) {
+  return Math.round(num * 1000) / 1000
+}
+
+function whichKey (e) {
+  if (window.event) // IE
+    return e.keyCode
+  return e.which
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
   var avgEl = document.getElementById('avg')
-  
+  var lastGuessesEl = document.getElementById('lastGuesses')
   var pressS = kefir.stream(emitter => {
     document.body.addEventListener("keypress", emitter.emit)
-  }).map(e => {
-    if(window.event) { // IE                    
-      return e.keyCode;
-    } else if(e.which){ // Netscape/Firefox/Opera                   
-      return e.which;
-    }
-  }).map(String.fromCharCode)
-  .filter(l => {
-   return (l==='f'||l==='d')
-  })
+  }).map(whichKey)
+    .map(String.fromCharCode)
+    .filter(l => (l==='f'||l==='d'))
 
-  var accuracyS = predict(pressS)
+  var predictionS = predict(pressS)
+  var accuracyS = mean(predictionS)
   var countS = accuracyS.scan(acc => acc+=1, 0)
 
-  accuracyS.zip(countS).filter(z => z[1]>15).onValue(z => 
-      avgEl.innerHTML = z[0]
-  )
+  accuracyS.zip(countS).filter(z => z[1]>15).onValue(z =>  {
+    avgEl.innerHTML = round(z[0])
+    return
+  })
+
+  predictionS.slidingWindow(20).onValue(ps => {
+    var guesses = ps.map(p => {
+      var correct = p[0]===p[1]
+      var color = correct ? "white" : "red"
+      return `<span style="background-color:${color}">predicted: ${p[0]}, observed: ${p[1]}</span><br>`
+    }).reverse().join('')
+    lastGuessesEl.innerHTML = guesses
+  })
+
+
 })
 
-},{"..":41,"kefir":30}],27:[function(require,module,exports){
+},{"..":41,"../src/running-mean":43,"kefir":30}],27:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -26088,7 +26107,6 @@ arguments[4][24][0].apply(exports,arguments)
 },{"buffer":3,"dup":24}],41:[function(require,module,exports){
 var kefir = require('kefir')
 var possibleFiveGrams = require('../src/possible-5-grams')()
-var mean = require('running-mean');
 var _ = require('lodash')
 /*
 
@@ -26119,42 +26137,29 @@ function predictNextLetter (fivegram) {
   return 'd'
 }
 
-function isCorrect (prediction, letter) {
-  if (prediction === letter)
-    return 1
-  return 0
-}
-
 function predict (inputS) {
-
-  var r = mean();
 
   var lastSix = inputS
       .slidingWindow(6,6)
 
   return lastSix.map(s => {
-   var fiveGram = _.slice(s, 0,5).join('')
-   // predict next value
-   var prediction = predictNextLetter(fiveGram)
-   //make a fn to update model after i see real value
-   var updateModel = updateModelF(fiveGram)
-   // get the next letter now
-   var last = _.last(s)
-   // update my model with it (HACK SIDE-EFFECTY)
-   updateModel(last)
-   // return whether my prediction was correct
-   return isCorrect(prediction, last)
-  })
-  .map(p => {
-    r.push(p)
-    return r.mean
+    var fiveGram = _.slice(s, 0,5).join('')
+    // predict next value
+    var prediction = predictNextLetter(fiveGram)
+    //make a fn to update model after i see real value
+    var updateModel = updateModelF(fiveGram)
+    // get the next letter now
+    var last = _.last(s)
+    // update my model with it (HACK SIDE-EFFECTY)
+    updateModel(last)
+    return [prediction, last]
   })
 
 }
 
 module.exports = predict
 
-},{"../src/possible-5-grams":42,"kefir":30,"lodash":31,"running-mean":39}],42:[function(require,module,exports){
+},{"../src/possible-5-grams":42,"kefir":30,"lodash":31}],42:[function(require,module,exports){
 var _ = require('lodash'),
     permutations = require('permutation')
 
@@ -26169,4 +26174,27 @@ module.exports = () => {
   return _.flatten(r)
 }
 
-},{"lodash":31,"permutation":32}]},{},[26]);
+},{"lodash":31,"permutation":32}],43:[function(require,module,exports){
+var mean = require('running-mean')
+// takes a stream of [prediction, letter]
+// outputs a rolling mean of accuracy
+
+function isCorrect (prediction, letter) {
+  if (prediction === letter)
+    return 1
+  return 0
+}
+
+module.exports = (stream) => {
+
+  var r = mean();
+
+  return stream
+    .map(r => isCorrect(r[0], r[1]))
+    .map(p => {
+      r.push(p)
+      return r.mean
+    })
+}
+
+},{"running-mean":39}]},{},[26]);
