@@ -26,6 +26,14 @@ This repo implements the no-enhancements version.
 
 Scott himself referenced this oracle at the end of his [reply to Roger Penrose](http://www.scottaaronson.com/blog/?p=2756)
 
+## verifying the trickery
+
+No tricks up my sleeve, I tested it with a PRNG. And you can too - just clone this repository and
+
+```
+npm install; npm test
+```
+
 ## license
 
 BSD
