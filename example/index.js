@@ -16,7 +16,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
    return (l==='f'||l==='d')
   })
 
-  predict(pressS).onValue(avg => {
-    avgEl.innerHTML = avg
-  })
+  var accuracyS = predict(pressS)
+  var countS = accuracyS.scan(acc => acc+=1, 0)
+
+  accuracyS.zip(countS).filter(z => z[1]>15).onValue(z => 
+      avgEl.innerHTML = z[0]
+  )
 })
