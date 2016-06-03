@@ -23,9 +23,18 @@ function updateModelF (fivegram) {
   }
 }
 
+function getProbability (target, complement) {
+  var total = target + complement
+  // never divide by zero
+  if (total === 0)
+    return 1 / 2
+  return target / total
+}
+
 function predictNextLetter (fivegram) {
   var m = model[fivegram]
-  if (m.f > m.d)
+  var p = getProbability(m.f, m.d)
+  if (p > Math.random())
     return 'f'
   return 'd'
 }
