@@ -7,7 +7,7 @@
   "scripts": {
     "test": "tape test/*.js",
     "watch": "runwatch \"**/*.js\" -r \"npm test\"",
-    "build": "browserify example/index.js -o example/bundle.js; html-inline example/index.html -o example/dist/index.html; rm example/bundle.js"
+    "build": "mkdir example/dist; browserify example/index.js -o example/bundle.js; html-inline example/index.html -o example/dist/index.html; rm example/bundle.js"
   },
   "devDependencies": {
     "browserify": "^13.0.1",
