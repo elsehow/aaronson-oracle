@@ -1,9 +1,43 @@
 <!doctype html>
-<style>
-#avg {
-  font-size: 4em;
-}
-</style>
+<head>
+  <!-- disable default 300ms latency of click events on touch devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    #avg {
+      font-size: 4em;
+    }
+    body {
+      margin-bottom: 100px;
+    }
+    #touch-buttons {
+      position: fixed;
+      bottom:0;
+      left: 0;
+      right: 0;
+      background: white;
+    }
+    #touch-buttons .button {
+      width: 50%;
+      float: left;
+      padding: 30px 0;
+      text-align:center;
+      box-sizing: border-box;
+      border-top: 2px solid;
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      -moz-user-select: none;
+      cursor: pointer;
+    }
+    #touch-buttons .button:first-child {
+      border-right: 1px solid;
+    }
+    #touch-buttons .button:last-child {
+      border-left: 1px solid;
+    }
+  </style>
+</head>
 <body>
   <script src="bundle.js"></script>
   Press the 'f' and 'd' keys randomly. As randomly as you can. I'll try to predict which key you'll press next.
@@ -18,5 +52,10 @@
 <p>
 What's going on here? This is an <a href="https://github.com/elsehow/aaronson-oracle">Aaronson Oracle</a>.
 </p>
+
+  <div id='touch-buttons'>
+    <div class='button' data-key='d'>D</div>
+    <div class='button' data-key='f'>F</div>
+  </div>
 
 </body>

@@ -16,11 +16,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   var avgEl = document.getElementById('avg')
   var lastGuessesEl = document.getElementById('lastGuesses')
-  var pressS = kefir.stream(emitter => {
+  var keyPressS = kefir.stream(emitter => {
     document.body.addEventListener("keypress", emitter.emit)
   }).map(whichKey)
     .map(String.fromCharCode)
     .filter(l => (l==='f'||l==='d'))
+
+  var buttonsE = document.querySelectorAll('.button');
+  var buttonsA = [buttonsE[0], buttonsE[1]];
+
+  var touchPressS = kefir.merge(
+    buttonsA.map(e => kefir.fromEvents(e, 'click'))
+  ).map(e => e.target.getAttribute('data-key'))
+
+  var pressS = kefir.merge([keyPressS, touchPressS]);
 
   var predictionS = predict(pressS)
   var accuracyS = mean(predictionS)
