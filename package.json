@@ -7,11 +7,13 @@
   "scripts": {
     "test": "tape test/*.js",
     "watch": "runwatch \"**/*.js\" -r \"npm test\"",
-    "build": "browserify example/index.js -o example/bundle.js; html-inline example/index.html -o example/dist/index.html; rm example/bundle.js"
+    "build": "browserify example/index.js -o example/bundle.js; html-inline example/index.html -o example/dist/index.html; rm example/bundle.js",
+    "prepublish": "ipfs-shrinkwrap"
   },
   "devDependencies": {
     "browserify": "^13.0.1",
     "html-inline": "^1.2.0",
+    "ipfs-shrinkwrap": "^1.0.5",
     "prng-well1024a": "^2.0.0",
     "runwatch": "^0.1.3",
     "tape": "^4.5.1"
@@ -23,5 +25,6 @@
     "onready": "0.0.3",
     "permutation": "0.0.1",
     "running-mean": "^0.1.0"
-  }
+  },
+  "ipfs-shrinkwrap": "QmPdWKU8fTpanYdto5ervJ1ZzMACvniMmy39PYZoEcPQWd"
 }
