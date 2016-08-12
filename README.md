@@ -36,6 +36,19 @@ No tricks up my sleeve, I tested it with a PRNG. And you can too - just clone th
 npm install; npm test
 ```
 
+## developing
+
+```
+npm install
+npm run build
+```
+
+now open index.html
+
+to build continuously (e.g. while editing
+
+`npm run watch`
+
 ## license
 
 BSD
