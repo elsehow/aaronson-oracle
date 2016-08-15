@@ -7,10 +7,12 @@
   "scripts": {
     "test": "tape test/*.js",
     "watch": "runwatch \"**/*.js\" -r \"npm test\"",
-    "build": "browserify example/index.js -o example/bundle.js; html-inline example/index.html -o example/dist/index.html; rm example/bundle.js",
+    "build": "browserify example/index.js -o example/bundle.js -t [babelify --presets [es2015]]; html-inline example/index.html -o example/dist/index.html; rm example/bundle.js",
     "prepublish": "ipfs-shrinkwrap"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.13.2",
+    "babelify": "^7.3.0",
     "browserify": "^13.0.1",
     "html-inline": "^1.2.0",
     "ipfs-shrinkwrap": "^1.0.5",

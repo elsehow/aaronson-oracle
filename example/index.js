@@ -23,10 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
     .filter(l => (l==='f'||l==='d'))
 
   var predictionS = predict(pressS)
-  var accuracyS = mean(predictionS)
   var countS = accuracyS.scan(acc => acc+=1, 0)
+  var sufficientCorpusS = countS.filter(z => z[1]>15).take(1)
+  var accuracyS = mean(predictionS.filterBy(sufficientCorpusS))
 
-  accuracyS.zip(countS).filter(z => z[1]>15).onValue(z =>  {
+  accuracyS.onValue(z =>  {
     avgEl.innerHTML = round(z[0]) + '%'
     return
   })
