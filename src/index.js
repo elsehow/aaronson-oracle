@@ -15,10 +15,11 @@ var _ = require('lodash')
 var model = {}
 function updateModelF (fivegram) {
   return function (letter) {
-    fg = model[fivegram]
-    if (!fg)
-      fg = { f: 0, d: 0 }
-    fg[letter]+=1
+    var fg = model[fivegram]
+    if (!fg) {
+      model[fivegram] = { f: 0, d: 0 }
+    }
+    model[fivegram][letter]+=1
     return
   }
 }
