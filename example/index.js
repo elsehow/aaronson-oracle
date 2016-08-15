@@ -14,6 +14,7 @@ function whichKey (e) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  var sufficientCorpusForAccuracy = 10
   var avgEl = document.getElementById('avg')
   var lastGuessesEl = document.getElementById('lastGuesses')
   var pressS = kefir.stream(emitter => {
@@ -23,12 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .filter(l => (l==='f'||l==='d'))
 
   var predictionS = predict(pressS)
-  var countS = accuracyS.scan(acc => acc+=1, 0)
-  var sufficientCorpusS = countS.filter(z => z[1]>15).take(1)
-  var accuracyS = mean(predictionS.filterBy(sufficientCorpusS))
+  var countS = predictionS.scan(acc => acc+=1, 0)
+  var sufficientCorpusS = countS.filter(z => z>sufficientCorpusForAccuracy)
+  var goodPredictionS = predictionS.sampledBy(sufficientCorpusS)
+  var accuracyS = mean(goodPredictionS)
 
   accuracyS.onValue(z =>  {
-    avgEl.innerHTML = round(z[0]) + '%'
+    avgEl.innerHTML = round(z) + '%'
     return
   })
 
