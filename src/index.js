@@ -1,5 +1,4 @@
 var kefir = require('kefir')
-var possibleFiveGrams = require('../src/possible-5-grams')()
 var _ = require('lodash')
 /*
 
@@ -14,36 +13,25 @@ var _ = require('lodash')
 
   */
 var model = {}
-possibleFiveGrams.map(fg => model[fg] = { f: 0, d: 0})
-
-
 function updateModelF (fivegram) {
   return function (letter) {
-    model[fivegram][letter]+=1
+    fg = model[fivegram]
+    if (!fg)
+      fg = { f: 0, d: 0 }
+    fg[letter]+=1
+    return
   }
 }
-
-function getProbability (target, complement) {
-  var total = target + complement
-  // never divide by zero
-  if (total === 0)
-    return 1 / 2
-  return target / total
-}
-
 function predictNextLetter (fivegram) {
   var m = model[fivegram]
-  var p = getProbability(m.f, m.d)
-  if (p > Math.random())
+  if (!m)
+    return 'f'
+  if (m.f > m.d)
     return 'f'
   return 'd'
 }
-
 function predict (inputS) {
-
-  var lastSix = inputS
-      .slidingWindow(6,6)
-
+  var lastSix = inputS.slidingWindow(6,6)
   return lastSix.map(s => {
     var fiveGram = _.slice(s, 0,5).join('')
     // predict next value
