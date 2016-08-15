@@ -14,7 +14,7 @@ function whichKey (e) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  var sufficientCorpusForAccuracy = 10
+  var sufficientCorpusForAccuracy = 20
   var avgEl = document.getElementById('avg')
   var lastGuessesEl = document.getElementById('lastGuesses')
   var pressS = kefir.stream(emitter => {
